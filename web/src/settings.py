@@ -23,6 +23,7 @@ SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'test@test.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
 MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
+MICROSERVICE_PREFIX = os.environ.get('MICROSERVICE_PREFIX', '')
 
 REDIS_URL = os.environ.get('REDIS_URL')
 
@@ -30,6 +31,8 @@ USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SENTRY = int(os.environ.get('ENABLE_SENTRY', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ENABLE_DEBUG_TOOLBAR = int(os.environ.get('ENABLE_DEBUG_TOOLBAR', 0))
+ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 0))
+
 INTERNAL_IPS = []
 
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
@@ -40,6 +43,8 @@ API_KEY_HEADER = os.environ.get('API_KEY_HEADER')
 API_KEY = os.environ.get('API_KEY')
 
 HEALTH_CHECK_URL = os.environ.get('HEALTH_CHECK_URL')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -95,6 +100,14 @@ REST_FRAMEWORK = {
     ),
 }
 
+if ENABLE_RENDERING:
+    """ For build CMS using DRF """
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    )
+
+
 ROOT_URLCONF = 'src.urls'
 
 LOGIN_URL = 'rest_framework:login'
@@ -125,12 +138,11 @@ DATABASES = {
         "NAME": os.environ.get("POSTGRES_DB"),
         "USER": os.environ.get("POSTGRES_USER"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOST"),
+        "HOST": os.environ.get("POSTGRES_SOCKET") or os.environ.get('POSTGRES_HOST'),
         "PORT": os.environ.get("POSTGRES_PORT"),
         "CONN_MAX_AGE": 0,
     },
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -149,7 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get('TZ', 'UTC')
 
 USE_I18N = True
 
@@ -160,10 +172,10 @@ USE_TZ = True
 TIMEZONE_COOKIE_NAME = 'timezone'
 TIMEZONE_COOKIE_AGE = 15552000  # 60*60*24*180
 
-STATIC_URL = '/static/'
+STATIC_URL = f'{MICROSERVICE_PREFIX}/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = '/media/'
+MEDIA_URL = f'{MICROSERVICE_PREFIX}/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOCALE_PATHS = (

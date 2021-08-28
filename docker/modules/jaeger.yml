@@ -6,7 +6,7 @@
 version: '3.7'
 
 services:
-  web:
+  payment:
     environment:
       - JAEGER_AGENT_HOST=jaeger
       - JAEGER_LOGGING=1
