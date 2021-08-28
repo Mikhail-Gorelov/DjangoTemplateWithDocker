@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Sample Gunicorn configuration file.
 
 #
@@ -49,6 +50,7 @@ backlog = 2048
 #
 #       A positive integer generally set to around 1000.
 #
+
 #   timeout - If a worker does not notify the master process in this
 #       number of seconds it is killed and a new worker is spawned
 #       to replace it.
