@@ -41,6 +41,8 @@ SWAGGER_URL = os.environ.get('SWAGGER_URL')
 
 API_KEY_HEADER = os.environ.get('API_KEY_HEADER')
 API_KEY = os.environ.get('API_KEY')
+BLOG_API_KEY = os.environ.get('BLOG_API_KEY')
+BLOG_API_URL = os.environ.get('BLOG_API_URL')
 
 HEALTH_CHECK_URL = os.environ.get('HEALTH_CHECK_URL')
 
@@ -66,8 +68,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'main.apps.MainConfig',
-    'test.apps.TestConfig',
-
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS

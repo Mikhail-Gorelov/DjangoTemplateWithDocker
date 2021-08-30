@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpRequest
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import GenericAPIView
@@ -7,7 +8,9 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication
 
+from .pagination import BasePageNumberPagination
 from .serializers import SetTimeZoneSerializer
+from .services import BlogMicroservice
 
 
 class TemplateAPIView(APIView):
@@ -36,3 +39,14 @@ class SetUserTimeZone(GenericAPIView):
             max_age=getattr(settings, 'TIMEZONE_COOKIE_AGE', 86400),
         )
         return response
+
+
+class ArticleListView(GenericAPIView):
+    pagination_class = BasePageNumberPagination
+
+    def get(self, request, *args, **kwargs):
+        url = '/posts/'
+        service = BlogMicroservice(request=request, url=url)
+        print(dir(request._request))
+        print(request.get_host())
+        return service.service_response()
